@@ -1,7 +1,13 @@
 {
     "dependencies": {
-        "express": "^4.15.3",
         "body-parser": "^1.17.2",
+        "express": "^4.15.3",
         "mysql": "^2.13.0"
+    },
+    "devDependencies": {
+        "nodemon": "^1.17.4"
+    },
+    "scripts": {
+      "devstart": "nodemon ./app.js"
     }
 }

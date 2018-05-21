@@ -1,7 +1,13 @@
 const express = require('express');
 const mysql = require('mysql');
+const bodyParser = require('body-parser');
 
 const app = express();
+
+// Include middleware
+app.use(bodyParser());
+
+// config for database
 const db = mysql.createPool({
     host: 'db',
     user: 'root',
@@ -9,28 +15,37 @@ const db = mysql.createPool({
     database: 'challenge',
 });
 
-app.get('/test', function (req, res) {
-    db.getConnection(function (err, connection) {
-        if (err) {
-            res.status(501).send(err.message);
-            return;
-        }
-        connection.query('SELECT col FROM test', function (err, results, fields) {
-            if (err) {
-                res.status(501).send(err.message);
-                connection.release();
-                return;
-            }
+// Add API endpoints
+app.use('/api', require('./routes/userRoutes'));
+app.use('/api', require('./routes/channelRoutes'));
+app.use('/api', require('./routes/messageRoutes'));
 
-            res.json({
-                result: results[0].col,
-                backend: 'nodejs',
-            });
-            connection.release();
-        });
-    });
-});
 
-app.listen(8000, function() {
-    console.log('Listening on port 8000');
+// app.get('/test', function (req, res) {
+//     db.getConnection(function (err, connection) {
+//         if (err) {
+//             res.status(501).send(err.message);
+//             return;
+//         }
+//         connection.query('SELECT col FROM test', function (err, results, fields) {
+//             if (err) {
+//                 res.status(501).send(err.message);
+//                 connection.release();
+//                 return;
+//             }
+//
+//             res.json({
+//                 result: results[0].col,
+//                 backend: 'nodejs',
+//             });
+//             connection.release();
+//         });
+//     });
+// });
+
+// Start the server
+const port = process.env.PORT || 8000;
+
+app.listen(port, function() {
+    console.log(`Listening on port ${port}`);
 });
