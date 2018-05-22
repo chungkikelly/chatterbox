@@ -2,7 +2,7 @@ USE challenge;
 
 CREATE TABLE users(
   ID integer NOT NULL AUTO_INCREMENT,
-  Username varchar(255) NOT NULL UNIQUE,
+  username varchar(255) NOT NULL UNIQUE,
   created_at datetime NOT NULL,
   updated_at datetime NOT NULL,
   PRIMARY KEY (ID)
@@ -10,7 +10,7 @@ CREATE TABLE users(
 
 CREATE TABLE channels(
   ID integer NOT NULL AUTO_INCREMENT,
-  Username varchar(255) NOT NULL,
+  username varchar(255) NOT NULL,
   created_at datetime NOT NULL,
   updated_at datetime NOT NULL,
   PRIMARY KEY (ID)
@@ -28,5 +28,5 @@ CREATE TABLE messages(
   FOREIGN KEY (channel_ID) REFERENCES channels(ID)
 );
 
-CREATE INDEX (message_user) ON messages (author_id);
-CREATE INDEX (message_channel) ON messages (channel_id);
+CREATE INDEX message_user ON messages (author_id);
+CREATE INDEX message_channel ON messages (channel_id);
