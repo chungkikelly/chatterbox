@@ -2,13 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 // Include middleware
 app.use(bodyParser());
 
 // Add API endpoints
 app.use('/api', require('./routes/userRoutes'));
-app.use('/api', require('./routes/channelRoutes'));
 app.use('/api', require('./routes/messageRoutes'));
 
 

@@ -15,3 +15,4 @@ router.post('/channels', channelsController.createChannel);
 module.exports = router;
 
 // TODO: Add edit and delete when time permits
+// TODO: We're gonna omit channels for the sake of time, go back and add
