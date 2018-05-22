@@ -1,19 +1,10 @@
 const express = require('express');
-const mysql = require('mysql');
 const bodyParser = require('body-parser');
 
 const app = express();
 
 // Include middleware
 app.use(bodyParser());
-
-// config for database
-const db = mysql.createPool({
-    host: 'db',
-    user: 'root',
-    password: 'testpass',
-    database: 'challenge',
-});
 
 // Add API endpoints
 app.use('/api', require('./routes/userRoutes'));
@@ -47,5 +38,5 @@ app.use('/api', require('./routes/messageRoutes'));
 const port = process.env.PORT || 8000;
 
 app.listen(port, function() {
-    console.log(`Listening on port ${port}`);
+  console.log(`Listening on port ${port}`);
 });
