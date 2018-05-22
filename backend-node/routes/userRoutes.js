@@ -14,4 +14,4 @@ router.post('/users', usersController.createUser);
 
 module.exports = router;
 
-// TODO: add controller functions after SQL queries are complete
+// TODO: Add edit and delete when time permits

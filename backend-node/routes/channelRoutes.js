@@ -12,7 +12,6 @@ router.get('/channels/:id', channelsController.fetchChannel);
 // Create a new channel
 router.post('/channels', channelsController.createChannel);
 
-
 module.exports = router;
 
-// TODO: add controller functions after SQL queries are complete
+// TODO: Add edit and delete when time permits
