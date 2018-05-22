@@ -6,7 +6,6 @@
 | :------------- | :------------- | :------------- |
 | id             | integer        | not null, primary key       |
 | username       | string         | not null, unique       |
-| status         | string         | not null       |
 | created_at     | datetime       | not null       |
 | updated_at     | datetime       | not null       |
 
@@ -15,7 +14,7 @@
 | Column Name    | Data Type      | Details        |
 | :------------- | :------------- | :------------- |
 | id             | integer        | not null, primary key       |
-| title          | string         | not null, unique       |
+| name           | string         | not null, unique       |
 | created_at     | datetime       | not null       |
 | updated_at     | datetime       | not null       |
 
