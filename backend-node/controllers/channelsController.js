@@ -5,7 +5,7 @@ const fetchChannelQuery = "SELECT * FROM channels WHERE id = ?;";
 const createChannelQuery = "INSERT INTO channels(name) VALUES(?);";
 const searchChannelQuery = "SELECT * FROM channels WHERE name LIKE ?";
 
-// fetch information about a specific user
+// fetch information about a specific channel
 exports.fetchChannel = (req, res) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
@@ -36,7 +36,7 @@ exports.fetchChannel = (req, res) => {
   });
 };
 
-// Search database for user with username that matches provided string
+// Search database for channel with username that matches provided string
 exports.searchChannel = (req, res) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
@@ -61,7 +61,7 @@ exports.searchChannel = (req, res) => {
   });
 };
 
-// create user
+// create channel
 exports.createChannel = (req, res) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {

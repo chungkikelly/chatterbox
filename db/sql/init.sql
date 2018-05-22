@@ -25,7 +25,7 @@ CREATE TABLE messages(
   updated_at timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (ID),
   FOREIGN KEY (author_id) REFERENCES users(ID),
-  FOREIGN KEY (channel_ID) REFERENCES channels(ID)
+  FOREIGN KEY (channel_id) REFERENCES channels(ID)
 );
 
 CREATE INDEX message_user ON messages (author_id);

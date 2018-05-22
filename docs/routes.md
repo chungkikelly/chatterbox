@@ -16,7 +16,7 @@
   + `GET /api/channels/:id/members` - fetch all users participating in a specific channel
 
 `messages`
-  + `GET /api/channels/:id/messages` - fetch all messages from a specific channel
+  + `GET /api/channels/:channel_id/messages` - fetch all messages from a specific channel
   + `POST /api/messages` - create a new message
   + `PATCH /api/messages/:id` - edit an existing message
   + `DELETE /api/messages/:id` - delete an existing message
