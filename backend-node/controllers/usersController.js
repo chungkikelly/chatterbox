@@ -93,3 +93,4 @@ exports.createUser = (req, res) => {
 
 // TODO Change return value for createUser function
 // TODO Change where the SQL queries get their values query vs body
+// TODO consider removing 501 errors within query callback

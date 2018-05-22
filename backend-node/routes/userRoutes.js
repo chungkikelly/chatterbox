@@ -12,7 +12,6 @@ router.get('/users/:id', usersController.fetchUser);
 // Create a new user
 router.post('/users', usersController.createUser);
 
-
 module.exports = router;
 
 // TODO: add controller functions after SQL queries are complete
