@@ -1,11 +1,11 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 
 const app = express();
 
 // Include middleware
 app.use(express.static('../frontend-react/public'));
-app.use(bodyParser());
+// app.use(bodyParser());
 
 // Add API endpoints
 // app.use('/api', require('./routes/userRoutes'));
