@@ -2,58 +2,44 @@ const db = require('./controller');
 
 // SQL Query Constants
 const fetchMessagesQuery = "SELECT * FROM messages";
-const createMessageQuery = "INSERT INTO messages(body, author_id) VALUES(?, ?, ?)";
+const createMessageQuery = "INSERT INTO messages(body, author_id) VALUES(?, ?)";
 
-// fetch information about a specific user
-exports.fetchMessages = (req, res) => {
+// fetch all messages for the shared channel
+exports.fetchMessages = (callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
-      res.status(501).send(serverError.message);
-      connection.release();
+      callback(false);
       return;
     }
 
     connection.query(fetchMessagesQuery, (err, results, fields) => {
-        if (err) {
-          res.status(501).send(err.message);
-          connection.release();
-          return;
-        }
+      connection.release();
+      if (err) {
+        callback(false);
+        return;
+      }
 
-        if (results.length === 0) {
-          res.status(404).send("No messages found.");
-          connection.release();
-          return;
-        }
-
-        res.json({
-          messages: results
-        });
-
-        connection.release();
+      callback(true);
     });
   });
 };
 
 // create message
-exports.createMessage = (body, authorID) => {
-  db.getConnection((serverError, connection) => {
+exports.createMessage = (body, authorID, callback) => {
+  return db.getConnection((serverError, connection) => {
     if (serverError) {
-      connection.release();
+      callback(false);
       return;
     }
 
     connection.query(createMessageQuery, [body, authorID], (err, results, fields) => {
+      connection.release();
       if (err) {
-        connection.release();
+        callback(false);
         return;
       }
 
-      connection.release();
+      callback(true);
     });
   });
 };
-
-// TODO Change return value for createMessage function
-// TODO Change where the SQL queries get their values query vs body
-// TODO consider removing 501 errors within query callback

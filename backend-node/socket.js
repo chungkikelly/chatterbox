@@ -1,4 +1,5 @@
 const usersController = require('./controllers/usersController');
+const messagesController = require('./controllers/messagesController');
 
 const generateSocketEventHandlers = (io) => {
   // server variables to quickly list who's online
@@ -29,11 +30,9 @@ const generateSocketEventHandlers = (io) => {
 
     // New message event handler
     socket.on('new message', (data, ack) => {
-      ack(true);
-      
-      socket.broadcast.emit('incoming message', data);
+      messagesController.createMessage(data.body, data.authorID)
+                        .then(() => ack(true), () => ack(false))
+                        .then(() => socket.broadcast.emit('incoming message', data));
     });
   });
 };
-
-// TODO consider adding ack callback

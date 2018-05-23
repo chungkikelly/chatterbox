@@ -8,8 +8,8 @@ app.use(express.static('../frontend-react/public'));
 app.use(bodyParser());
 
 // Add API endpoints
-app.use('/api', require('./routes/userRoutes'));
-app.use('/api', require('./routes/messageRoutes'));
+// app.use('/api', require('./routes/userRoutes'));
+// app.use('/api', require('./routes/messageRoutes'));
 
 // Landing Page
 app.get('/', (req, res) => {

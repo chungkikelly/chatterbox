@@ -7,110 +7,85 @@ const createUserQuery = "INSERT INTO users(username) VALUES(?);";
 const updateUserQuery = "UPDATE users SET last_online = CURRENT_TIMESTAMP WHERE id = ?";
 
 // fetch information about a specific user
-exports.fetchUser = (req, res) => {
+exports.fetchUser = (id, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
-      res.status(501).send(serverError.message);
-      connection.release();
+      callback(false);
       return;
     }
 
-    connection.query(fetchUserQuery, req.params.id, (err, results, fields) => {
-        if (err) {
-          res.status(501).send(err.message);
-          connection.release();
-          return;
-        }
+    connection.query(fetchUserQuery, id, (err, results, fields) => {
+      connection.release();
+      if (err) {
+        callback(false);
+        return;
+      }
 
-        if (results.length === 0) {
-          res.status(404).send("No user found.");
-          connection.release();
-          return;
-        }
+      callback(true);
 
-        res.json({
-          user: results
-        });
-
-        connection.release();
+      connection.release();
     });
   });
 };
 
 // Search database for user with username that matches provided string
-exports.searchUser = (req, res) => {
+exports.searchUser = (username, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
-      res.status(501).send(serverError.message);
-      connection.release();
+      callback(false);
       return;
     }
 
-    connection.query(searchUserQuery, '%' + req.query.username + '%', (err, results, fields) => {
+    connection.query(searchUserQuery, '%' + username + '%', (err, results, fields) => {
+      connection.release();
       if (err) {
-        res.status(501).send(err.message);
-        connection.release();
+        callback(false);
         return;
       }
 
-      res.json({
-        user: results
-      });
-
-      connection.release();
+      callback(true);
     });
   });
 };
 
 // Create user
-exports.createUser = (req, res) => {
+exports.createUser = (username, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
-      res.status(501).send(serverError.message);
+      callback(false);
+      return;
+    }
+
+    connection.query(createUserQuery, username, (err, results, fields) => {
       connection.release();
-      return;
-    }
-
-    if (!req.query.username) {
-      res.status(422).send("No username provided.");
-      return;
-    }
-
-    connection.query(createUserQuery, req.query.username, (err, results, fields) => {
       if (err) {
-        res.status(422).send("Username already exists.");
-        connection.release();
+        callback(false);
         return;
       }
 
-      res.json({
-        user: req.query.username
-      });
-
-      connection.release();
+      callback(true);
     });
+
+
   });
 };
 
 // Update user's last log in time
-exports.updateUser = (id) => {
+exports.updateUser = (id, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
-      connection.release();
+      callback(false);
       return;
     }
 
     connection.query(updateUserQuery, id, (err, results, fields) => {
+      connection.release();
       if (err) {
-        connection.release();
+        callback(false);
         return;
       }
 
-      connection.release();
+      callback(true);
     });
   });
 };
-
-// TODO Change return value for createUser function
-// TODO Change where the SQL queries get their values query vs body
-// TODO consider removing 501 errors within query callback
