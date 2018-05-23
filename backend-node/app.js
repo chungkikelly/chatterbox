@@ -2,42 +2,27 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const server = require('http').Server(app);
-const io = require('socket.io')(server);
 
 // Include middleware
+app.use(express.static('../frontend-react/public'));
 app.use(bodyParser());
 
 // Add API endpoints
 app.use('/api', require('./routes/userRoutes'));
 app.use('/api', require('./routes/messageRoutes'));
 
+// Landing Page
+app.get('/', (req, res) => {
+  res.render('index');
+});
 
-// app.get('/test', function (req, res) {
-//     db.getConnection(function (err, connection) {
-//         if (err) {
-//             res.status(501).send(err.message);
-//             return;
-//         }
-//         connection.query('SELECT col FROM test', function (err, results, fields) {
-//             if (err) {
-//                 res.status(501).send(err.message);
-//                 connection.release();
-//                 return;
-//             }
-//
-//             res.json({
-//                 result: results[0].col,
-//                 backend: 'nodejs',
-//             });
-//             connection.release();
-//         });
-//     });
-// });
-
-// Start the server
+// Generate and start HTTP server to be reused for Socket.io
 const port = process.env.PORT || 8000;
-
-app.listen(port, function() {
+const server = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+const io = require('socket.io')(server);
+
+// Install handlers for socket events
+const eventHandlers = require('./socket')(io);

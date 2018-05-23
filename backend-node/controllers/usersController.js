@@ -2,8 +2,9 @@ const db = require('./controller');
 
 // SQL Query Constants
 const fetchUserQuery = "SELECT * FROM users WHERE id = ?;";
+const searchUserQuery = "SELECT * FROM users WHERE username LIKE ?;";
 const createUserQuery = "INSERT INTO users(username) VALUES(?);";
-const searchUserQuery = "SELECT * FROM users WHERE username LIKE ?";
+const updateUserQuery = "UPDATE users SET last_online = CURRENT_TIMESTAMP WHERE id = ?";
 
 // fetch information about a specific user
 exports.fetchUser = (req, res) => {
@@ -61,7 +62,7 @@ exports.searchUser = (req, res) => {
   });
 };
 
-// create user
+// Create user
 exports.createUser = (req, res) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
@@ -85,6 +86,25 @@ exports.createUser = (req, res) => {
       res.json({
         user: req.query.username
       });
+
+      connection.release();
+    });
+  });
+};
+
+// Update user's last log in time
+exports.updateUser = (id) => {
+  db.getConnection((serverError, connection) => {
+    if (serverError) {
+      connection.release();
+      return;
+    }
+
+    connection.query(updateUserQuery, id, (err, results, fields) => {
+      if (err) {
+        connection.release();
+        return;
+      }
 
       connection.release();
     });

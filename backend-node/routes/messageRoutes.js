@@ -4,10 +4,7 @@ const messagesController = require('../controllers/messagesController');
 const router = express.Router();
 
 // Fetch all messages from a specific channel
-router.get('/channels/:channel_id/messages', messagesController.fetchMessages);
-
-// Create a new message
-router.post('/messages', messagesController.createMessage);
+router.get('/messages', messagesController.fetchMessages);
 
 // Edit an existing message
 // router.patch('/messages/:id');

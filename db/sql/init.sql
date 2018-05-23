@@ -3,6 +3,7 @@ USE challenge;
 CREATE TABLE users(
   ID integer NOT NULL AUTO_INCREMENT,
   username varchar(255) NOT NULL UNIQUE,
+  last_online timestamp DEFAULT CURRENT_TIMESTAMP,
   created_at timestamp DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (ID)
