@@ -63,27 +63,28 @@ exports.createUser = (username, callback) => {
         return;
       }
 
-      callback(true);
+      // Return new user ID to be bound to socket
+      callback(true, results.insertId);
     });
   });
 };
 
 // Update user's last log in time
-// exports.updateUser = (username, callback) => {
-//   db.getConnection((serverError, connection) => {
-//     if (serverError) {
-//       callback(false, "Internal Server Error");
-//       return;
-//     }
-//
-//     connection.query(updateUserQuery, username, (err, results, fields) => {
-//       connection.release();
-//       if (err) {
-//         callback(false, "Failed to update user");
-//         return;
-//       }
-//
-//       callback(true);
-//     });
-//   });
-// };
+exports.updateUser = (username, callback) => {
+  db.getConnection((serverError, connection) => {
+    if (serverError) {
+      callback(false, "Internal Server Error");
+      return;
+    }
+
+    connection.query(updateUserQuery, username, (err, results, fields) => {
+      connection.release();
+      if (err) {
+        callback(false, "Failed to update user");
+        return;
+      }
+
+      callback(true);
+    });
+  });
+};

@@ -1,19 +1,34 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client';
 
-class NavBar extends Component {
+export default class NavBar extends Component {
   constructor(props){
     super(props);
     this.state = {
       users: []
     };
-
-
   }
 
-  render(){
-    return <ul className="nav-bar">
-      {this.props.users }
-    </ul>;
+  componentDidMount() {
+    const { socket } = this.props;
+    socket.on('update online list', (users) => {
+      this.setState({ users });
+    });
+    socket.emit('request online list');
+  }
+
+  render() {
+    const { users } = this.state;
+
+    return (
+      <ul className="nav-bar">
+        { users.map((user) => <li className="online-li"
+                                  key={`li-${user}`}>
+                                  {user}
+                              </li>
+                    )}
+      </ul>
+  );
   }
 }
+
+// TODO Make sure to decide whether or not to include current user

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import LoginForm from './loginForm';
-// import Chat from './chat';
+import Chat from './chat';
 
 class App extends Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class App extends Component {
     return (
       <div className="outermost-container">
         {
-          !user ? <LoginForm socket={socket}/> : <div>SUCCESS</div>
+          !user ? <LoginForm socket={socket}/> : <Chat socket={socket}/>
         }
       </div>
     );

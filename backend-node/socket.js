@@ -10,36 +10,66 @@ const generateSocketEventHandlers = (io) => {
     activeSockets.push(socket);
 
     socket.on('new user', function(username){
-      usersController.createUser(username, (success, error) => {
+      usersController.createUser(username, (success, data) => {
         if(success) {
-          socket.broadcast.emit('update online list', username);
-          socket.emit('login', username);
           users.push(username);
+
+          // Bind user id and username to socket for easy access
+          socket.id = data;
           socket.username = username;
+
+          socket.emit('login', username);
+          socket.broadcast.emit('update online list', users);
         } else {
           // Current hack to send error message to socket owner
-          socket.emit('login-error', error);
+          socket.emit('login error', data);
         }
       });
     });
 
     // User disconnect event handler
-    // socket.on('disconnect', () => {
-    //   // remove socket and user from server variables
-    //   activeSockets.splice(activeSockets.indexOf(socket), 1);
-    //   users.splice(users.indexOf(socket.username), 1);
-    //
-    //   // update last online timestamp to handle unread messages on next sign in
-    //   usersController.updateUser(socket.username);
-    //   socket.broadcast.emit('update online list', users);
-    // });
+    socket.on('disconnect', () => {
+
+      // update last online timestamp to handle unread messages on next sign in
+      usersController.updateUser(socket.username, (success, error) => {
+        if(success) {
+          // remove socket and user from server variables
+          activeSockets.splice(activeSockets.indexOf(socket), 1);
+          users.splice(users.indexOf(socket.username), 1);
+          socket.broadcast.emit('update online list', users);
+        }
+      });
+    });
+
+    // TODO consider error handling for 'disconnect' event
+
+    // Update online list for users that just logged in
+    socket.on('request online list', () => {
+      socket.emit('update online list', users);
+    });
 
     // New message event handler
-    // socket.on('new message', (data, ack) => {
-    //   messagesController.createMessage(data.body, data.authorID)
-    //                     .then(() => ack(true), () => ack(false))
-    //                     .then(() => socket.broadcast.emit('incoming message', data));
-    // });
+    socket.on('new message', (body) => {
+      messagesController.createMessage(body, socket.id, (success, data) => {
+        if(success) {
+          messagesController.fetchMessage(data, (innerSuccess, innerData) => {
+            socket.broadcast.emit('incoming message', innerData);
+          });
+        } else {
+          socket.emit('messages-error', data);
+        }
+      });
+    });
+
+    socket.on('request messages', (username) => {
+      messagesController.fetchMessages((success, data) => {
+        if(success) {
+          socket.emit('receive messages', data);
+        } else {
+          socket.emit('messages-error', data);
+        }
+      });
+    });
   });
 };
 

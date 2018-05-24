@@ -13,17 +13,13 @@ export default class LoginForm extends Component {
 
   componentDidMount(){
     const { socket } = this.props;
-    socket.on('login-error', (error) => {
+    socket.on('login error', (error) => {
       this.setState({ error });
     });
   }
 
   handleChange(e){
     this.setState({username: e.target.value});
-  }
-
-  handleError(error){
-    this.setState({ error });
   }
 
   handleSubmit(e){
@@ -36,14 +32,17 @@ export default class LoginForm extends Component {
   render() {
     const { username, error } = this.state;
     return (
-      <div className="login">
+      <div className="login-container">
         <form onSubmit={this.handleSubmit} className="login-form">
           <div className="login-error">
             { error }
           </div>
           <label>
             What's your username?
-            <input className="login-input" value={username} onChange={this.handleChange}/>
+            <input className="login-input"
+                   type="text"
+                   value={username}
+                   onChange={this.handleChange}/>
           </label>
         </form>
       </div>

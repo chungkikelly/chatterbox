@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import NavBar from './navBar';
-import MessageIndex from './messageIndex';
+import MessageContainer from './messageContainer';
 
-class Chat extends Component {
+export default class Chat extends Component {
   render() {
     const { socket } = this.props;
     return (
-      <div>
+      <div className="chat-container">
         <NavBar socket={socket}/>
-        <MessageIndex socket={socket}/>
+        <MessageContainer socket={socket}/>
       </div>
     );
   }
 }
-
-export default Chat;
