@@ -48,6 +48,16 @@ const generateSocketEventHandlers = (io) => {
       socket.emit('update online list', users);
     });
 
+    // Handle user typing
+    socket.on('user is typing', (username) => {
+      socket.broadcast.emit('another user is typing', username);
+    });
+
+    // Conversely, handle user stopped typing
+    socket.on('user is not typing', (username) => {
+      socket.broadcast.emit('another user stopped typing', username);
+    });
+
     // New message event handler
     socket.on('new message', (body) => {
       messagesController.createMessage(body, socket.id, (success, data) => {

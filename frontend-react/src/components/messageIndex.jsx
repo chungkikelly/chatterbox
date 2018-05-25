@@ -28,7 +28,6 @@ export default class MessageIndex extends Component {
 
   render() {
     const { messages, error } = this.state;
-    console.log(this.state);
     return (
       <div className="message-container">
         <div className="message-errors">

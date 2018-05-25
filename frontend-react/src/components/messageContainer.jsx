@@ -6,41 +6,66 @@ export default class MessageContainer extends Component {
     super(props);
     this.state = {
       body: '',
-      typing: false
+      typing: false,
+      typingUsers: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
-  handleChange(e){
-    this.setState({ body: e.target.value });
+  componentDidMount() {
+    const { typingUsers } = this.state;
+    const { socket } = this.props;
+
+    // Handle typing events
+    socket.on('another user is typing', (username) => {
+      if (username !== socket.username) {
+        this.setState({ typingUsers: [...typingUsers, username] });
+      }
+    });
+    socket.on('another user stopped typing', (username) => {
+      if (username !== socket.username) {
+        typingUsers.splice(typingUsers.indexOf(username), 1);
+        this.setState({ typingUsers });
+      }
+    });
   }
 
-  // TODO consider merging this into handleKeyPress
+  handleChange(e){
+
+    // Handle change and typing events (typing emission must happen after change happens)
+    this.setState({ body: e.target.value }, () => {
+      const { body, typing } = this.state;
+      const { socket } = this.props;
+
+      if (!typing && body.length !== 0) {
+        this.setState({ typing: true });
+        socket.emit('user is typing', socket.username);
+      } else if (typing && body.length ===0) {
+        this.setState({ typing: false });
+        socket.emit('user is not typing', socket.username);
+      }
+    });
+  }
 
   handleKeyPress(e) {
-    const { body, typing } = this.state;
     const { socket } = this.props;
-    console.log(e.target.value);
-    // Conditions to manage message submission and typing events
+
+    // Condition to manage message submission
     if (e.key === "Enter") {
       socket.emit('new message', this.state.body);
       this.setState({ body: '' });
       socket.emit('user is not typing', socket.username);
-    } else if (!typing && body.length !== 0) {
-      this.setState({ typing: true });
-      socket.emit('user is typing', socket.username);
-    } else if (typing && body.length === 0) {
-      this.setState({ typing: false });
-      socket.emit('user is not typing', socket.username);
     }
   }
 
-// TODO add typing listeners on server
-
   render() {
-    const { body } = this.state;
+    const { body, typingUsers } = this.state;
     const { socket } = this.props;
+    console.log(typingUsers);
+    console.log(socket.username);
+    console.log(socket);
+
     return (
       <div className="message-container">
         <MessageIndex socket={socket}/>
@@ -48,8 +73,11 @@ export default class MessageContainer extends Component {
                type="text"
                value={body}
                onChange={this.handleChange}
-               onKeyPress={this.handleKeyPress}
+               onKeyDown={this.handleKeyPress}
         />
+        <div>
+          { typingUsers.length === 1 ? `${typingUsers[0]} is typing...` : `${typingUsers.length} users are typing...`}
+        </div>
       </div>
     );
   }

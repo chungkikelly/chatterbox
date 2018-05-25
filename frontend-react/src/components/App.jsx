@@ -22,6 +22,7 @@ class App extends Component {
     this.setState({ socket });
     socket.on('login', (username) =>{
       this.setState({ user: username});
+      socket.username = username;
     });
   }
 
