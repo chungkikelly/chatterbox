@@ -10,7 +10,7 @@ export default class MessageIndex extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     const { socket } = this.props;
     socket.on('receive messages', (messages) => {
       this.setState({ messages });

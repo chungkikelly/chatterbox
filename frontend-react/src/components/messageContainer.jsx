@@ -31,7 +31,7 @@ export default class MessageContainer extends Component {
     });
   }
 
-  handleChange(e){
+  handleChange(e) {
 
     // Handle change and typing events (typing emission must happen after change happens)
     this.setState({ body: e.target.value }, () => {
@@ -65,14 +65,10 @@ export default class MessageContainer extends Component {
     const { body, typingUsers } = this.state;
     const { socket } = this.props;
 
-    const typingIndicator =
-      (
-        <div className="typing-indicator">
-          { typingUsers.length === 1 ?
-            `${typingUsers[0]} is typing...` :
-            `${typingUsers.length} users are typing...` }
-        </div>
-      );
+    const singleUser = `${typingUsers[0]} is typing...`;
+    const manyUsers = `${typingUsers.length} users are typing...`;
+
+    const typingIndicator = typingUsers.length === 1 ? singleUser : manyUsers;
 
     return (
       <div className="message-container">
@@ -83,9 +79,9 @@ export default class MessageContainer extends Component {
                onChange={this.handleChange}
                onKeyDown={this.handleKeyPress}
         />
-        { typingUsers.length === 0 ?
-          <div className="typingIndicator"></div> :
-          typingIndicator }
+        <div className="typingIndicator">
+          { typingUsers.length === 0 ? '' : typingIndicator }
+        </div>
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 export default class LoginForm extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       username: '',
@@ -11,18 +11,18 @@ export default class LoginForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     const { socket } = this.props;
     socket.on('login error', (error) => {
       this.setState({ error });
     });
   }
 
-  handleChange(e){
+  handleChange(e) {
     this.setState({ username: e.target.value });
   }
 
-  handleSubmit(e){
+  handleSubmit(e) {
     e.preventDefault();
     const { username } = this.state;
     const { socket } = this.props;
