@@ -34,16 +34,22 @@ export default class LoginForm extends Component {
     return (
       <div className="login-container">
         <form onSubmit={this.handleSubmit} className="login-form">
-          <div className="login-error">
-            { error }
+          <img src={"https://www.chatterboxapps.com.au/wp-content/uploads/2014/08/Chatterbox-Logo-Blue.png"}
+               alt="Chatterbox"
+               className="login-image"/>
+          <div className="login-greeting">
+            Welcome back!
           </div>
-          <label>
-            What's your username?
+          <div className="login-inner-container">
+            <div className="login-error">
+              { error }
+            </div>
             <input className="login-input"
                    type="text"
                    value={username}
-                   onChange={this.handleChange}/>
-          </label>
+                   onChange={this.handleChange}
+                   placeholder="What's your username?"/>
+          </div>
         </form>
       </div>
     );

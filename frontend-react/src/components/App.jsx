@@ -30,9 +30,7 @@ class App extends Component {
     const { socket, user } = this.state;
     return (
       <div className="outermost-container">
-        {
-          user ? <Chat socket={socket}/> : <LoginForm socket={socket}/>
-        }
+        { user ? <Chat socket={socket}/> : <LoginForm socket={socket}/> }
       </div>
     );
   }
