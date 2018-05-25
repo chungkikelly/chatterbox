@@ -65,6 +65,13 @@ export default class MessageContainer extends Component {
     const { body, typingUsers } = this.state;
     const { socket } = this.props;
 
+    const typingIndicator =
+      (
+        <div className="typing-indicator">
+          { typingUsers.length === 1 ? `${typingUsers[0]} is typing...` : `${typingUsers.length} users are typing...`}
+        </div>
+      );
+
     return (
       <div className="message-container">
         <MessageIndex socket={socket}/>
@@ -74,9 +81,7 @@ export default class MessageContainer extends Component {
                onChange={this.handleChange}
                onKeyDown={this.handleKeyPress}
         />
-        <div>
-          { typingUsers.length === 1 ? `${typingUsers[0]} is typing...` : `${typingUsers.length} users are typing...`}
-        </div>
+        { typingUsers.length === 0 ? <div className="typingIndicator"></div> : typingIndicator }
       </div>
     );
   }
