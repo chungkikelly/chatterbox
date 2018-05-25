@@ -34,7 +34,9 @@ export default class MessageIndex extends Component {
           { error }
         </div>
         <ul className="message-list">
-          { messages.map((message) => <MessageIndexItem message={message} key={`${message.ID}-li`}/>)}
+          { messages.map((message) =>
+            <MessageIndexItem message={message} key={`${message.ID}-li`}/>
+          )}
         </ul>
       </div>
     );

@@ -21,11 +21,11 @@ export default class NavBar extends Component {
 
     return (
       <ul className="nav-bar">
-        { users.map((user) => <li className="online-li"
-                                  key={`li-${user}`}>
-                                  {user}
-                              </li>
-                    )}
+        { users.map((user) =>
+          <li className="online-li" key={`li-${user}`}>
+            {user}
+          </li>
+        )}
       </ul>
   );
   }

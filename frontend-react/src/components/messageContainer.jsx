@@ -68,7 +68,9 @@ export default class MessageContainer extends Component {
     const typingIndicator =
       (
         <div className="typing-indicator">
-          { typingUsers.length === 1 ? `${typingUsers[0]} is typing...` : `${typingUsers.length} users are typing...`}
+          { typingUsers.length === 1 ?
+            `${typingUsers[0]} is typing...` :
+            `${typingUsers.length} users are typing...` }
         </div>
       );
 
@@ -81,7 +83,9 @@ export default class MessageContainer extends Component {
                onChange={this.handleChange}
                onKeyDown={this.handleKeyPress}
         />
-        { typingUsers.length === 0 ? <div className="typingIndicator"></div> : typingIndicator }
+        { typingUsers.length === 0 ?
+          <div className="typingIndicator"></div> :
+          typingIndicator }
       </div>
     );
   }

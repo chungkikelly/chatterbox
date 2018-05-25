@@ -31,7 +31,7 @@ class App extends Component {
     return (
       <div className="outermost-container">
         {
-          !user ? <LoginForm socket={socket}/> : <Chat socket={socket}/>
+          user ? <Chat socket={socket}/> : <LoginForm socket={socket}/>
         }
       </div>
     );
