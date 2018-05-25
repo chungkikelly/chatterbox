@@ -6,6 +6,8 @@ export default class NavBar extends Component {
     this.state = {
       users: []
     };
+
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -16,6 +18,11 @@ export default class NavBar extends Component {
     socket.emit('request online list');
   }
 
+  handleClick(e){
+    const { socket } = this.props;
+    socket.emit('request new messages', socket.username);
+  }
+
   render() {
     const { users } = this.state;
 
@@ -24,7 +31,8 @@ export default class NavBar extends Component {
         <div className="nav-bar-logo">
           Chatterbox
         </div>
-        <div className="new-notifs">
+        <div className="new-notifs" onClick={this.handleClick}>
+          View New Messages
         </div>
         <div className="nav-bar-online">
           Online

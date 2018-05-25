@@ -42,6 +42,15 @@ const generateSocketEventHandlers = (io) => {
       });
     });
 
+    // User read list of messages / new messages
+    socket.on('update last online', (username) => {
+      usersController.updateUser(username, () => {
+        console.log('Failed table update');
+      });
+    });
+
+    // TODO consider error handling for update event handler
+
     // User disconnect event handler
     socket.on('disconnect', () => {
 
@@ -52,6 +61,9 @@ const generateSocketEventHandlers = (io) => {
           activeSockets.splice(activeSockets.indexOf(socket), 1);
           users.splice(users.indexOf(socket.username), 1);
           socket.broadcast.emit('update online list', users);
+
+          // handle edge case typing event won't cease because of disconnect
+          socket.broadcast.emit('another user stopped typing', socket.username);
         }
       });
     });
@@ -88,6 +100,16 @@ const generateSocketEventHandlers = (io) => {
 
     socket.on('request messages', (username) => {
       messagesController.fetchMessages((success, data) => {
+        if(success) {
+          socket.emit('receive messages', data);
+        } else {
+          socket.emit('messages-error', data);
+        }
+      });
+    });
+
+    socket.on('request new messages', (username) => {
+      messagesController.fetchNewMessages(username, (success, data) =>{
         if(success) {
           socket.emit('receive messages', data);
         } else {

@@ -4,7 +4,8 @@ const db = require('./controller');
 const fetchUserQuery = "SELECT * FROM users WHERE username = ?;";
 const searchUserQuery = "SELECT * FROM users WHERE username LIKE ?;";
 const createUserQuery = "INSERT INTO users(username) VALUES(?);";
-const updateUserQuery = "UPDATE users SET last_online = CURRENT_TIMESTAMP WHERE username = ?";
+const updateUserQuery = "UPDATE users SET last_online = CURRENT_TIMESTAMP" +
+                       " WHERE username = ?;";
 
 // fetch information about a specific user
 exports.fetchUser = (username, callback) => {
@@ -75,6 +76,7 @@ exports.createUser = (username, callback) => {
 
 // Update user's last log in time
 exports.updateUser = (username, callback) => {
+  console.log(username);
   db.getConnection((serverError, connection) => {
     if (serverError) {
       callback(false, "Internal Server Error");
@@ -83,6 +85,7 @@ exports.updateUser = (username, callback) => {
 
     connection.query(updateUserQuery, username, (err, results, fields) => {
       connection.release();
+      console.log(err);
       if (err) {
         callback(false, "Failed to update user");
         return;
