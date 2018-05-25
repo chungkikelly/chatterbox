@@ -41,11 +41,9 @@ export default class MessageContainer extends Component {
       if (!typing && body.length !== 0) {
         this.setState({ typing: true });
         socket.emit('user is typing', socket.username);
-        console.log('user is typing');
       } else if (typing && body.length ===0) {
         this.setState({ typing: false });
         socket.emit('user is not typing', socket.username);
-        console.log('user is not typing');
       }
     });
   }
@@ -74,10 +72,11 @@ export default class MessageContainer extends Component {
       <div className="message-container">
         <MessageIndex socket={socket}/>
         <input className="message-input"
-               type="text"
-               value={body}
-               onChange={this.handleChange}
-               onKeyDown={this.handleKeyPress}
+          type="text"
+          placeholder="Message the group"
+          value={body}
+          onChange={this.handleChange}
+          onKeyDown={this.handleKeyPress}
         />
         <div className="typingIndicator">
           { typingUsers.length === 0 ? '' : typingIndicator }

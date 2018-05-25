@@ -1,0 +1,44 @@
+.message-index {
+  display: flex;
+  flex-direction: column-reverse;
+  margin-left: 20px;
+  margin-right: 10px;
+  margin: 10px 10px 10px 20px;
+}
+
+.message-index-item {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin: 13px;
+}
+
+.message-title {
+  display: flex;
+  height: auto;
+  flex-direction: row;
+  align-items: center;
+}
+
+.username {
+  display: flex;
+  font-size: 15px;
+  font-weight: 900;
+  margin-right: 15px;
+}
+
+.datetime {
+  display: flex;
+  height: auto;
+  font-size: 12px;
+  color: #717274;
+  padding-top: 4px;
+}
+
+.message-body {
+  display: flex;
+  font-size: 15px;
+  margin: 8px;
+  margin-left: 0px;
+  line-height: 1.46668;
+}

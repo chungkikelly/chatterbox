@@ -1,8 +1,11 @@
 const db = require('./controller');
 
 // SQL Query Constants
-const fetchMessageQuery = "SELECT messages.ID, messages.body, users.username FROM messages JOIN users ON users.id = messages.author_id WHERE messages.id = ?";
-const fetchMessagesQuery = "SELECT messages.ID, messages.body, users.username FROM messages JOIN users ON users.id = messages.author_id";
+const fetchMessageQuery = "SELECT messages.ID, messages.body, messages.created_at, users.username" +
+                          " FROM messages JOIN users ON users.id = messages.author_id" +
+                          " WHERE messages.id = ?";
+const fetchMessagesQuery = "SELECT messages.ID, messages.body, messages.created_at, users.username" +
+                           " FROM messages JOIN users ON users.id = messages.author_id";
 const createMessageQuery = "INSERT INTO messages(body, author_id) VALUES(?, ?)";
 
 exports.fetchMessage = (id, callback) => {
