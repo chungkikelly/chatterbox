@@ -41,9 +41,11 @@ export default class MessageContainer extends Component {
       if (!typing && body.length !== 0) {
         this.setState({ typing: true });
         socket.emit('user is typing', socket.username);
+        console.log('user is typing');
       } else if (typing && body.length ===0) {
         this.setState({ typing: false });
         socket.emit('user is not typing', socket.username);
+        console.log('user is not typing');
       }
     });
   }
@@ -52,9 +54,9 @@ export default class MessageContainer extends Component {
     const { socket } = this.props;
 
     // Condition to manage message submission
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && this.state.body.length !== 0) {
       socket.emit('new message', this.state.body);
-      this.setState({ body: '' });
+      this.setState({ body: '', typing: false });
       socket.emit('user is not typing', socket.username);
     }
   }
@@ -62,9 +64,6 @@ export default class MessageContainer extends Component {
   render() {
     const { body, typingUsers } = this.state;
     const { socket } = this.props;
-    console.log(typingUsers);
-    console.log(socket.username);
-    console.log(socket);
 
     return (
       <div className="message-container">

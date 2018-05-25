@@ -1,29 +1,33 @@
 const db = require('./controller');
 
 // SQL Query Constants
-const fetchUserQuery = "SELECT * FROM users WHERE id = ?;";
+const fetchUserQuery = "SELECT * FROM users WHERE username = ?;";
 const searchUserQuery = "SELECT * FROM users WHERE username LIKE ?;";
 const createUserQuery = "INSERT INTO users(username) VALUES(?);";
 const updateUserQuery = "UPDATE users SET last_online = CURRENT_TIMESTAMP WHERE username = ?";
 
 // fetch information about a specific user
-exports.fetchUser = (id, callback) => {
+exports.fetchUser = (username, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
       callback(false);
       return;
     }
 
-    connection.query(fetchUserQuery, id, (err, results, fields) => {
+    connection.query(fetchUserQuery, username, (err, results, fields) => {
       connection.release();
       if (err) {
         callback(false);
         return;
       }
 
-      callback(true);
+      if (results.length === 0) {
+        callback(false);
+        return;
+      }
 
-      connection.release();
+      // Should be a unique username, therefore only need the first row of results
+      callback(true, results[0]);
     });
   });
 };

@@ -9,20 +9,35 @@ const generateSocketEventHandlers = (io) => {
   io.on('connection', (socket) => {
     activeSockets.push(socket);
 
+    // refactored login code
+    const loginUser = (username, id) => {
+      users.push(username);
+
+      // Bind user ID and username to socket for easy access
+      socket.id = id;
+      socket.username = username;
+
+      socket.emit('login', username);
+      socket.broadcast.emit('update online list', users);
+    };
+
     socket.on('new user', function(username){
-      usersController.createUser(username, (success, data) => {
+
+      // First check if user exists:
+      // 1) if so, fetch user information and login
+      // 2) if not, create user and login
+      usersController.fetchUser(username, (success, user) => {
         if(success) {
-          users.push(username);
-
-          // Bind user id and username to socket for easy access
-          socket.id = data;
-          socket.username = username;
-
-          socket.emit('login', username);
-          socket.broadcast.emit('update online list', users);
+          loginUser(username, user.ID);
         } else {
-          // Current hack to send error message to socket owner
-          socket.emit('login error', data);
+          usersController.createUser(username, (innerSuccess, data) => {
+            if(innerSuccess) {
+              loginUser(username, data);
+            } else {
+              // Current hack to send error message to socket owner
+              socket.emit('login error', data);
+            }
+          });
         }
       });
     });

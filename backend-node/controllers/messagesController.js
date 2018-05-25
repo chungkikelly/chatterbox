@@ -8,14 +8,19 @@ const createMessageQuery = "INSERT INTO messages(body, author_id) VALUES(?, ?)";
 exports.fetchMessage = (id, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
-      callback(false, serverError);
+      callback(false, "Internal Server Error.");
       return;
     }
 
     connection.query(fetchMessageQuery, id, (err, results, fields) => {
       connection.release();
       if(err) {
-        callback(false, err);
+        callback(false, "Sorry, we are having some technical difficulties.");
+        return;
+      }
+
+      if(results.length === 0) {
+        callback(false, "Could not find the message you were looking for.");
         return;
       }
 
@@ -28,14 +33,14 @@ exports.fetchMessage = (id, callback) => {
 exports.fetchMessages = (callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
-      callback(false, serverError);
+      callback(false, "Internal Server Error.");
       return;
     }
 
     connection.query(fetchMessagesQuery, (err, results, fields) => {
       connection.release();
       if (err) {
-        callback(false, err);
+        callback(false, "Could not find any messages.");
         return;
       }
 
@@ -48,14 +53,14 @@ exports.fetchMessages = (callback) => {
 exports.createMessage = (body, authorID, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
-      callback(false, serverError);
+      callback(false, "Internal Server Error.");
       return;
     }
 
     connection.query(createMessageQuery, [body, authorID], (err, results, fields) => {
       connection.release();
       if (err) {
-        callback(false, err);
+        callback(false, "Could not send message.");
         return;
       }
 

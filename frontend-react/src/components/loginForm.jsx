@@ -19,7 +19,7 @@ export default class LoginForm extends Component {
   }
 
   handleChange(e){
-    this.setState({username: e.target.value});
+    this.setState({ username: e.target.value });
   }
 
   handleSubmit(e){
