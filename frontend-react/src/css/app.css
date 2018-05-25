@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Condiment');
+
 html {
   width: 100%;
   height: 100%;
@@ -6,12 +9,10 @@ html {
 body {
   width: inherit;
   height: inherit;
-  font-family: 'Open Sans', cursive;
+  font-family: 'Open Sans', sans-serif;
 }
 
 div {
   width: inherit;
   height: inherit;
 }
-
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');

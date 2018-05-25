@@ -1,0 +1,40 @@
+.chat-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-bar {
+  display: flex;
+  flex-direction: column;
+  width: 15%;
+  min-width: 220px;
+  background-color: #4d394b
+}
+
+.nav-bar-logo {
+  display: flex;
+  font-family: 'Condiment', sans-serif;
+  font-size: 40px;
+  color: white;
+  background-color: #3e313c;
+  box-sizing: border-box;
+  padding: 20px;
+  height: 8%;
+  width: 100%;
+}
+
+.nav-bar-online {
+  display: flex;
+  font-size: 20px;
+  color: #4C9689;
+  padding-left: 55px;
+  margin: 20px;
+  width: 100%;
+}
+
+.online-li {
+  font-size: 18px;
+  color: white;
+  padding: 10px;
+  padding-left: 25px;
+}

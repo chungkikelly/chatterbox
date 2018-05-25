@@ -26,7 +26,10 @@ export default class LoginForm extends Component {
     e.preventDefault();
     const { username } = this.state;
     const { socket } = this.props;
-    socket.emit("new user", username);
+    if (username.length !== 0) {
+      socket.emit("new user", username);
+      this.setState({ username: '' });
+    }
   }
 
   render() {

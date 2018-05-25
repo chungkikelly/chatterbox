@@ -21,6 +21,14 @@ export default class NavBar extends Component {
 
     return (
       <ul className="nav-bar">
+        <div className="nav-bar-logo">
+          Chatterbox
+        </div>
+        <div className="new-notifs">
+        </div>
+        <div className="nav-bar-online">
+          Online
+        </div>
         { users.map((user) =>
           <li className="online-li" key={`li-${user}`}>
             { user }
