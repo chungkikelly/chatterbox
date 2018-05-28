@@ -15,23 +15,23 @@ exports.fetchChannel = (req, res) => {
     }
 
     connection.query(fetchChannelQuery, req.params.id, (err, results, fields) => {
-        if (err) {
-          res.status(501).send(err.message);
-          connection.release();
-          return;
-        }
-
-        if (results.length === 0) {
-          res.status(404).send("No channel found.");
-          connection.release();
-          return;
-        }
-
-        res.json({
-          channel: results
-        });
-
+      if (err) {
+        res.status(501).send(err.message);
         connection.release();
+        return;
+      }
+
+      if (results.length === 0) {
+        res.status(404).send("No channel found.");
+        connection.release();
+        return;
+      }
+
+      res.json({
+        channel: results
+      });
+
+      connection.release();
     });
   });
 };

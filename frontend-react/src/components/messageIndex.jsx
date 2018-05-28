@@ -12,9 +12,11 @@ export default class MessageIndex extends Component {
 
   componentDidMount() {
     const { socket } = this.props;
-    
+
     socket.on('receive messages', (messages) => {
       this.setState({ messages });
+
+      // Emit socket event to handle read messages
       socket.emit('update last online', socket.username);
     });
     socket.on('incoming message', (message) => {

@@ -44,8 +44,8 @@ const generateSocketEventHandlers = (io) => {
 
     // User read list of messages / new messages
     socket.on('update last online', (username) => {
-      usersController.updateUser(username, () => {
-        console.log('Failed table update');
+      usersController.updateUser(username, (success, message) => {
+        console.log(message);
       });
     });
 
