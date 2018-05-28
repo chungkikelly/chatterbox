@@ -2,6 +2,10 @@ const db = require('./controller');
 
 // SQL Query Constants
 const fetchChannelQuery = "SELECT * FROM channels WHERE title = ?;";
+const fetchUserChannelsQuery = "SELECT channels.ID, channels.title " +
+                               "FROM channels JOIN memberships ON channels.ID = memberships.channel_id " +
+                               "JOIN users ON memberships.user_id = users.ID " +
+                               "WHERE users.username = ?";
 const createChannelQuery = "INSERT INTO channels(title) VALUES(?);";
 const searchChannelQuery = "SELECT * FROM channels WHERE title LIKE ?";
 
@@ -21,6 +25,26 @@ exports.fetchChannel = (title, callback) => {
       }
 
       callback(true, results[0]);
+    });
+  });
+};
+
+// fetch an user's list of channels
+exports.fetchUserChannels = (username, callback) => {
+  db.getConnection((serverError, connection) => {
+    if (serverError) {
+      callback(false, "Internal Server Error.");
+      return;
+    }
+
+    connection.query(fetchUserChannelsQuery, username, (err, results, fields) => {
+      connection.release();
+      if (err || results.length === 0) {
+        callback(false, "No channels for that user.");
+        return;
+      }
+
+      callback(true, results);
     });
   });
 };

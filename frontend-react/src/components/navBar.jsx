@@ -4,7 +4,8 @@ export default class NavBar extends Component {
   constructor(props){
     super(props);
     this.state = {
-      users: []
+      users: [],
+      channels: []
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -15,7 +16,11 @@ export default class NavBar extends Component {
     socket.on('update online list', (users) => {
       this.setState({ users });
     });
+    socket.on('receive channels list', (channels) => {
+      this.setState({ channels });
+    });
     socket.emit('request online list');
+    socket.emit('request user channels', socket.username);
   }
 
   handleClick(e){
@@ -24,7 +29,8 @@ export default class NavBar extends Component {
   }
 
   render() {
-    const { users } = this.state;
+    const { users, channels } = this.state;
+    console.log(channels);
 
     return (
       <ul className="nav-bar">

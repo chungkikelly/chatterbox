@@ -1,5 +1,7 @@
 const usersController = require('./controllers/usersController');
 const messagesController = require('./controllers/messagesController');
+const channelsController = require('./controllers/channelsController');
+const membershipsController = require('./controllers/membershipsController');
 
 const generateSocketEventHandlers = (io) => {
   // server variables to quickly list who's online
@@ -32,6 +34,9 @@ const generateSocketEventHandlers = (io) => {
         } else {
           usersController.createUser(username, (innerSuccess, data) => {
             if(innerSuccess) {
+
+              // All new users should join the general chat
+              membershipsController.joinChannel(data, 1);
               loginUser(username, data);
             } else {
               // Current hack to send error message to socket owner
@@ -45,7 +50,6 @@ const generateSocketEventHandlers = (io) => {
     // User read list of messages / new messages
     socket.on('update last online', (username) => {
       usersController.updateUser(username, (success, message) => {
-        console.log(message);
       });
     });
 
@@ -109,11 +113,21 @@ const generateSocketEventHandlers = (io) => {
     });
 
     socket.on('request new messages', (username) => {
-      messagesController.fetchNewMessages(username, (success, data) =>{
+      messagesController.fetchNewMessages(username, (success, data) => {
         if(success) {
           socket.emit('receive messages', data);
         } else {
           socket.emit('messages-error', data);
+        }
+      });
+    });
+
+    socket.on('request user channels', (username) => {
+      channelsController.fetchUserChannels(username, (success, data) => {
+        if(success) {
+          socket.emit('receive channels list', data);
+        } else {
+          socket.emit('channels-error', data);
         }
       });
     });

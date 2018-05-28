@@ -45,3 +45,5 @@ CREATE TABLE messages(
 
 CREATE INDEX message_user ON messages (author_id);
 CREATE INDEX message_channel ON messages (channel_id);
+
+INSERT INTO channels(title) VALUES ('general');
