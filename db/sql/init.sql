@@ -11,7 +11,7 @@ CREATE TABLE users(
 
 CREATE TABLE channels(
   ID integer NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL UNIQUE,
+  title varchar(255) NOT NULL UNIQUE,
   created_at timestamp DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (ID)

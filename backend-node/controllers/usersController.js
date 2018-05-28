@@ -85,7 +85,6 @@ exports.updateUser = (username, callback) => {
 
     connection.query(updateUserQuery, username, (err, results, fields) => {
       connection.release();
-      console.log(err);
       if (err) {
         callback(false, "Failed to update user");
         return;
