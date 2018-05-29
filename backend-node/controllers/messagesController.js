@@ -5,13 +5,14 @@ const fetchMessageQuery = "SELECT messages.ID, messages.body, messages.created_a
                           " FROM messages JOIN users ON users.ID = messages.author_id" +
                           " WHERE messages.id = ?;";
 const fetchMessagesQuery = "SELECT messages.ID, messages.body, messages.created_at, users.username" +
-                           " FROM messages JOIN users ON users.ID = messages.author_id;";
+                           " FROM messages JOIN users ON users.ID = messages.author_id " +
+                           " WHERE messages.channel_id = ?;";
 const fetchNewMessagesQuery = "SELECT messages.ID, messages.body, messages.created_at, users.username" +
                               " FROM messages JOIN users on users.ID = messages.author_id" +
                               " WHERE messages.created_at >" +
                               " (SELECT users.last_online" +
                               " FROM users WHERE users.username = ?);";
-const createMessageQuery = "INSERT INTO messages(body, author_id) VALUES(?, ?);";
+const createMessageQuery = "INSERT INTO messages(body, author_id, channel_id) VALUES(?, ?, ?);";
 
 exports.fetchMessage = (id, callback) => {
   db.getConnection((serverError, connection) => {
@@ -38,14 +39,14 @@ exports.fetchMessage = (id, callback) => {
 };
 
 // fetch all messages for the shared channel
-exports.fetchMessages = (callback) => {
+exports.fetchMessages = (channelID, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
       callback(false, "Internal Server Error.");
       return;
     }
 
-    connection.query(fetchMessagesQuery, (err, results, fields) => {
+    connection.query(fetchMessagesQuery, channelID, (err, results, fields) => {
       connection.release();
       if (err) {
         callback(false, "Could not find any messages.");
@@ -78,14 +79,14 @@ exports.fetchNewMessages = (username, callback) => {
 };
 
 // create message
-exports.createMessage = (body, authorID, callback) => {
+exports.createMessage = (body, authorID, channelID, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
       callback(false, "Internal Server Error.");
       return;
     }
 
-    connection.query(createMessageQuery, [body, authorID], (err, results, fields) => {
+    connection.query(createMessageQuery, [body, authorID, channelID], (err, results, fields) => {
       connection.release();
       if (err) {
         callback(false, "Could not send message.");

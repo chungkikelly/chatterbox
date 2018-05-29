@@ -29,7 +29,7 @@ export default class NavBar extends Component {
   }
 
   render() {
-    const { users, channels } = this.state;
+    const { channels } = this.state;
 
     return (
       <ul className="nav-bar">

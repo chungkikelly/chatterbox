@@ -10,14 +10,19 @@ const generateSocketEventHandlers = (io) => {
 
   io.on('connection', (socket) => {
     activeSockets.push(socket);
+    socket.join('general');
 
     // refactored login code
     const loginUser = (username, id) => {
       users.push(username);
 
-      // Bind user ID and username to socket for easy access
+      // Bind user ID, username, and initial channel to socket for easy access
       socket.id = id;
       socket.username = username;
+      socket.channel = 'general';
+      // The general channel will always be the first row of the database
+      socket.channelID = 1;
+      socket.join(socket.channel);
 
       socket.emit('login', username);
       socket.broadcast.emit('update online list', users);
@@ -67,7 +72,7 @@ const generateSocketEventHandlers = (io) => {
           socket.broadcast.emit('update online list', users);
 
           // handle edge case typing event won't cease because of disconnect
-          socket.broadcast.emit('another user stopped typing', socket.username);
+          io.sockets.in(socket.channel).emit('another user stopped typing', socket.username);
         }
       });
     });
@@ -81,20 +86,21 @@ const generateSocketEventHandlers = (io) => {
 
     // Handle user typing
     socket.on('user is typing', (username) => {
-      socket.broadcast.emit('another user is typing', username);
+      io.sockets.in(socket.channel).emit('another user is typing', username);
     });
 
     // Conversely, handle user stopped typing
     socket.on('user is not typing', (username) => {
-      socket.broadcast.emit('another user stopped typing', username);
+      io.sockets.in(socket.channel).emit('another user stopped typing', username);
     });
 
     // New message event handler
     socket.on('new message', (body) => {
-      messagesController.createMessage(body, socket.id, (success, data) => {
+      messagesController.createMessage(body, socket.id, socket.channelID, (success, data) => {
         if(success) {
           messagesController.fetchMessage(data, (innerSuccess, innerData) => {
-            socket.broadcast.emit('incoming message', innerData);
+            console.log("backend success");
+            io.sockets.in(socket.channel).emit('incoming message', innerData);
           });
         } else {
           socket.emit('messages-error', data);
@@ -103,7 +109,7 @@ const generateSocketEventHandlers = (io) => {
     });
 
     socket.on('request messages', (username) => {
-      messagesController.fetchMessages((success, data) => {
+      messagesController.fetchMessages(socket.channelID, (success, data) => {
         if(success) {
           socket.emit('receive messages', data);
         } else {
