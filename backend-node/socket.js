@@ -171,6 +171,16 @@ const generateSocketEventHandlers = (io) => {
         }
       });
     });
+
+    socket.on('search channel', (title) => {
+      channelsController.searchChannel(title, (success, data) => {
+        if(success) {
+          socket.emit('receive channel suggestions', data);
+        } else {
+          socket.emit('channels-error', data);
+        }
+      });
+    });
   });
 };
 

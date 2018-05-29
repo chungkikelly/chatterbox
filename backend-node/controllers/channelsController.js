@@ -8,7 +8,8 @@ const fetchUserChannelsQuery = "SELECT channels.ID, channels.title " +
                                "WHERE users.ID = ? " +
                                "ORDER BY channels.title ASC;";
 const createChannelQuery = "INSERT INTO channels(title) VALUES(?);";
-const searchChannelQuery = "SELECT * FROM channels WHERE title LIKE ?;";
+const searchChannelQuery = "SELECT channels.ID, channels.title " +
+                          "FROM channels WHERE title LIKE ?;";
 
 // fetch information about a specific channel
 exports.fetchChannel = (channelID, callback) => {
