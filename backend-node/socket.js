@@ -19,6 +19,7 @@ const generateSocketEventHandlers = (io) => {
       socket.join('general', () => {
         socket.emit('login', username);
 
+        // Count the numbre of clients currently in the channel
         const clients = io.sockets.adapter.rooms[socket.channel].sockets;
         const numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0;
 
@@ -50,21 +51,18 @@ const generateSocketEventHandlers = (io) => {
       });
     });
 
-    // User read list of messages / new messages
-    socket.on('update last online', (username) => {
-      usersController.updateUser(username, (success, message) => {
-      });
-    });
-
-    // TODO consider error handling for update event handler
+    // // User read list of messages / new messages
+    // socket.on('update last online', (username) => {
+    //   usersController.updateUser(username, (success, message) => {
+    //   });
+    // });
 
     // User disconnect event handler
     socket.on('disconnect', () => {
 
       // update last online timestamp to handle unread messages on next sign in
-      usersController.updateUser(socket.username, (success, error) => {
+      usersController.updateUser(socket.userID, (success, error) => {
         if(success) {
-          const numberOnline = Object.keys(io.nsps['/'].adapter.rooms[socket.channel]).length;
           io.sockets.in(socket.channel).emit('user left channel');
 
           // handle edge case typing event won't cease because of disconnect
@@ -98,7 +96,7 @@ const generateSocketEventHandlers = (io) => {
       });
     });
 
-    socket.on('request messages', (username) => {
+    socket.on('request messages', () => {
       messagesController.fetchMessages(socket.channelID, (success, data) => {
         if(success) {
           socket.emit('receive messages', data);
@@ -108,9 +106,11 @@ const generateSocketEventHandlers = (io) => {
       });
     });
 
-    socket.on('request new messages', (username) => {
-      messagesController.fetchNewMessages(username, (success, data) => {
+    socket.on('request new messages', () => {
+      messagesController.fetchNewMessages(socket.userID, (success, data) => {
         if(success) {
+          usersController.updateUser(socket.userID, () => {
+          });
           socket.emit('receive messages', data);
         } else {
           socket.emit('messages-error', data);
@@ -118,8 +118,8 @@ const generateSocketEventHandlers = (io) => {
       });
     });
 
-    socket.on('request user channels', (username) => {
-      channelsController.fetchUserChannels(username, (success, data) => {
+    socket.on('request user channels', () => {
+      channelsController.fetchUserChannels(socket.userID, (success, data) => {
         if(success) {
           socket.emit('receive channels list', data);
         } else {
@@ -156,6 +156,7 @@ const generateSocketEventHandlers = (io) => {
               socket.emit('receive messages', innerData);
               socket.join(socket.channel, () => {
 
+                // Count the number of clients currently in the room
                 const clients = io.sockets.adapter.rooms[socket.channel].sockets;
                 const numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0;
 

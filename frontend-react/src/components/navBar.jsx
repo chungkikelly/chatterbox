@@ -28,7 +28,7 @@ export default class NavBar extends Component {
     socket.on('receive channel', (channelID, title) => {
       this.setState({ modal: false, channels: [...this.state.channels, { ID: channelID, title }]});
     });
-    socket.emit('request user channels', socket.username);
+    socket.emit('request user channels');
   }
 
   handleChange(e) {
@@ -37,7 +37,7 @@ export default class NavBar extends Component {
 
   handleClick() {
     const { socket } = this.props;
-    socket.emit('request new messages', socket.username);
+    socket.emit('request new messages');
   }
 
   handleCreate() {

@@ -11,7 +11,12 @@ const fetchNewMessagesQuery = "SELECT messages.ID, messages.body, messages.creat
                               " FROM messages JOIN users on users.ID = messages.author_id" +
                               " WHERE messages.created_at >" +
                               " (SELECT users.last_online" +
-                              " FROM users WHERE users.username = ?);";
+                              " FROM users WHERE users.ID = ?) " +
+                              "AND messages.channel_id IN " +
+                              "(SELECT channels.ID FROM channels " +
+                              "JOIN memberships ON channels.ID = memberships.channel_id " +
+                              "JOIN users ON users.ID = memberships.user_id " +
+                              "WHERE users.ID = ?);";
 const createMessageQuery = "INSERT INTO messages(body, author_id, channel_id) VALUES(?, ?, ?);";
 
 exports.fetchMessage = (id, callback) => {
@@ -59,15 +64,16 @@ exports.fetchMessages = (channelID, callback) => {
 };
 
 // fetch all new messages for the shared channel
-exports.fetchNewMessages = (username, callback) => {
+exports.fetchNewMessages = (userID, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
       callback(false, "Internal Server Error.");
       return;
     }
 
-    connection.query(fetchNewMessagesQuery, username, (err, results, fields) => {
+    connection.query(fetchNewMessagesQuery, [userID, userID], (err, results, fields) => {
       connection.release();
+      console.log(err);
       if (err || results.length === 0) {
         callback(false, "Could not find any new messages.");
         return;

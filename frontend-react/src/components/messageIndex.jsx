@@ -25,7 +25,7 @@ export default class MessageIndex extends Component {
     socket.on('messages-error', (error) => {
       this.setState({ error });
     });
-    socket.emit('request messages', socket.username);
+    socket.emit('request messages');
   }
 
 // TODO need to change setState for messages (infinite scrolling)

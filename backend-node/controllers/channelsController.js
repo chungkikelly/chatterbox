@@ -5,20 +5,20 @@ const fetchChannelQuery = "SELECT * FROM channels WHERE ID = ?;";
 const fetchUserChannelsQuery = "SELECT channels.ID, channels.title " +
                                "FROM channels JOIN memberships ON channels.ID = memberships.channel_id " +
                                "JOIN users ON memberships.user_id = users.ID " +
-                               "WHERE users.username = ? " +
+                               "WHERE users.ID = ? " +
                                "ORDER BY channels.title ASC;";
 const createChannelQuery = "INSERT INTO channels(title) VALUES(?);";
 const searchChannelQuery = "SELECT * FROM channels WHERE title LIKE ?;";
 
 // fetch information about a specific channel
-exports.fetchChannel = (title, callback) => {
+exports.fetchChannel = (channelID, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
       callback(false, "Internal Server Error.");
       return;
     }
 
-    connection.query(fetchChannelQuery, title, (err, results, fields) => {
+    connection.query(fetchChannelQuery, channelID, (err, results, fields) => {
       connection.release();
       if (err || results.length === 0) {
         callback(false, "No channel found by that name.");
@@ -31,14 +31,14 @@ exports.fetchChannel = (title, callback) => {
 };
 
 // fetch an user's list of channels
-exports.fetchUserChannels = (username, callback) => {
+exports.fetchUserChannels = (userID, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
       callback(false, "Internal Server Error.");
       return;
     }
 
-    connection.query(fetchUserChannelsQuery, username, (err, results, fields) => {
+    connection.query(fetchUserChannelsQuery, userID, (err, results, fields) => {
       connection.release();
       if (err || results.length === 0) {
         callback(false, "No channels for that user.");

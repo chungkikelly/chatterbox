@@ -5,7 +5,7 @@ const fetchUserQuery = "SELECT * FROM users WHERE username = ?;";
 const searchUserQuery = "SELECT * FROM users WHERE username LIKE ?;";
 const createUserQuery = "INSERT INTO users(username) VALUES(?);";
 const updateUserQuery = "UPDATE users SET last_online = CURRENT_TIMESTAMP" +
-                       " WHERE username = ?;";
+                       " WHERE ID = ?;";
 
 // fetch information about a specific user
 exports.fetchUser = (username, callback) => {
@@ -75,14 +75,14 @@ exports.createUser = (username, callback) => {
 };
 
 // Update user's last log in time
-exports.updateUser = (username, callback) => {
+exports.updateUser = (userID, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
       callback(false, "Internal Server Error");
       return;
     }
 
-    connection.query(updateUserQuery, username, (err, results, fields) => {
+    connection.query(updateUserQuery, [userID], (err, results, fields) => {
       connection.release();
       if (err) {
         callback(false, "Failed to update user");
