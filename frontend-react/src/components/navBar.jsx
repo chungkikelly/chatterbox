@@ -15,6 +15,7 @@ export default class NavBar extends Component {
     this.handleCreate = this.handleCreate.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleModal = this.handleModal.bind(this);
+    this.switchChannel = this.switchChannel.bind(this);
   }
 
   componentDidMount() {
@@ -68,6 +69,12 @@ export default class NavBar extends Component {
     return 'new-channel-modal ' + (this.state.modal ? 'show' : 'hidden');
   }
 
+  switchChannel(channelID) {
+    const { socket } = this.props;
+
+    socket.emit('switch channel', channelID);
+  }
+
   render() {
     const { channels, channelName } = this.state;
 
@@ -116,7 +123,9 @@ export default class NavBar extends Component {
           </div>
         </div>
         { channels.map((channel) =>
-          <li className="channel-li" key={`li-${channel.title}`}>
+          <li className="channel-li"
+              key={`li-${channel.title}`}
+              onClick={() => this.switchChannel(channel.ID)}>
             { `# ${channel.title}` }
           </li>
         )}

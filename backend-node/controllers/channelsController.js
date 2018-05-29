@@ -1,7 +1,7 @@
 const db = require('./controller');
 
 // SQL Query Constants
-const fetchChannelQuery = "SELECT * FROM channels WHERE title = ?;";
+const fetchChannelQuery = "SELECT * FROM channels WHERE ID = ?;";
 const fetchUserChannelsQuery = "SELECT channels.ID, channels.title " +
                                "FROM channels JOIN memberships ON channels.ID = memberships.channel_id " +
                                "JOIN users ON memberships.user_id = users.ID " +

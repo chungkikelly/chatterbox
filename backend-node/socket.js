@@ -154,6 +154,25 @@ const generateSocketEventHandlers = (io) => {
         }
       });
     });
+
+    socket.on('switch channel', (channelID) => {
+      channelsController.fetchChannel(channelID, (success, data) => {
+        if(success) {
+          socket.channel = data.title;
+          socket.channelID = data.ID;
+          socket.join(data.title);
+          messagesController.fetchMessages(socket.channelID, (innerSuccess, innerData) => {
+            if(innerSuccess) {
+              socket.emit('receive messages', innerData);
+            } else {
+              socket.emit('messages-error', innerData);
+            }
+          });
+        } else {
+          socket.emit('channels-error', data);
+        }
+      });
+    });
   });
 };
 
