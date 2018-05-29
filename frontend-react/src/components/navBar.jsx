@@ -6,6 +6,7 @@ export default class NavBar extends Component {
     this.state = {
       users: [],
       channels: [],
+      currentChannelID: null,
       modal: false,
       channelName: ''
     };
@@ -21,16 +22,12 @@ export default class NavBar extends Component {
   componentDidMount() {
     const { socket } = this.props;
 
-    socket.on('update online list', (users) => {
-      this.setState({ users });
-    });
     socket.on('receive channels list', (channels) => {
       this.setState({ channels });
     });
     socket.on('receive channel', (channelID, title) => {
       this.setState({ modal: false, channels: [...this.state.channels, { ID: channelID, title }]});
     });
-    socket.emit('request online list');
     socket.emit('request user channels', socket.username);
   }
 
@@ -72,7 +69,10 @@ export default class NavBar extends Component {
   switchChannel(channelID) {
     const { socket } = this.props;
 
-    socket.emit('switch channel', channelID);
+    if (this.state.currentChannelID !== channelID) {
+      this.setState({ currentChannelID: channelID });
+      socket.emit('switch channel', channelID);
+    }
   }
 
   render() {
@@ -125,7 +125,7 @@ export default class NavBar extends Component {
         { channels.map((channel) =>
           <li className="channel-li"
               key={`li-${channel.title}`}
-              onClick={() => this.switchChannel(channel.ID)}>
+              onClick={() => this.switchChannel(channel.ID, channel.title)}>
             { `# ${channel.title}` }
           </li>
         )}

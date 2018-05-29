@@ -8,5 +8,6 @@ import './css/navBar.css';
 import './css/messageContainer.css';
 import './css/messageIndex.css';
 import './css/modal.css';
+import './css/channelHeader.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));

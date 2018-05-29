@@ -1,0 +1,23 @@
+.channel-header-container {
+  display: flex;
+  flex-direction: column;
+  height: 12%;
+  padding-left: 25px;
+  color: #717274;
+  border-bottom: 1px solid rgb(202,196,201);
+  width: 100%;
+}
+
+.channel-title {
+  display: flex;
+  height: auto;
+  font-size: 18px;
+  font-weight: 900;
+  color: black;
+  margin: 10px 0;
+}
+
+.online-count {
+  display: flex;
+  height: auto;
+}

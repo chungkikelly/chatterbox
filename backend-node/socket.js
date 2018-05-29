@@ -4,16 +4,11 @@ const channelsController = require('./controllers/channelsController');
 const membershipsController = require('./controllers/membershipsController');
 
 const generateSocketEventHandlers = (io) => {
-  // server variables to quickly list who's online
-  const activeSockets = [];
-  const users = [];
 
   io.on('connection', (socket) => {
-    activeSockets.push(socket);
 
     // refactored login code
     const loginUser = (username, id) => {
-      users.push(username);
 
       // Bind user ID, username, and initial channel to socket for easy access
       socket.userID = id;
@@ -23,7 +18,11 @@ const generateSocketEventHandlers = (io) => {
       socket.channelID = 1;
       socket.join('general', () => {
         socket.emit('login', username);
-        socket.broadcast.emit('update online list', users);
+
+        const clients = io.sockets.adapter.rooms[socket.channel].sockets;
+        const numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0;
+
+        io.sockets.in(socket.channel).emit('user joined channel', numClients);
       });
     };
 
@@ -65,10 +64,8 @@ const generateSocketEventHandlers = (io) => {
       // update last online timestamp to handle unread messages on next sign in
       usersController.updateUser(socket.username, (success, error) => {
         if(success) {
-          // remove socket and user from server variables
-          activeSockets.splice(activeSockets.indexOf(socket), 1);
-          users.splice(users.indexOf(socket.username), 1);
-          socket.broadcast.emit('update online list', users);
+          const numberOnline = Object.keys(io.nsps['/'].adapter.rooms[socket.channel]).length;
+          io.sockets.in(socket.channel).emit('user left channel');
 
           // handle edge case typing event won't cease because of disconnect
           io.sockets.in(socket.channel).emit('another user stopped typing', socket.username);
@@ -77,18 +74,6 @@ const generateSocketEventHandlers = (io) => {
     });
 
     // TODO consider error handling for 'disconnect' event
-
-    // Update online list for users that just logged in
-    socket.on('request online list', () => {
-      socket.emit('update online list', users);
-    });
-
-    // socket.on('join channel', (title, channelID) => {
-    //   socket.join(title);
-    //   console.log(socket);
-    //   socket.channel = title;
-    //   socket.channelID = channelID;
-    // });
 
     // Handle user typing
     socket.on('user is typing', (username) => {
@@ -158,12 +143,24 @@ const generateSocketEventHandlers = (io) => {
     socket.on('switch channel', (channelID) => {
       channelsController.fetchChannel(channelID, (success, data) => {
         if(success) {
+
+          // Properly update number of current users in room when leaving
+          socket.leave(socket.channel);
+          io.sockets.in(socket.channel).emit('user left channel');
+
           socket.channel = data.title;
           socket.channelID = data.ID;
-          socket.join(data.title);
           messagesController.fetchMessages(socket.channelID, (innerSuccess, innerData) => {
             if(innerSuccess) {
+              socket.emit('receive channel info', socket.channel);
               socket.emit('receive messages', innerData);
+              socket.join(socket.channel, () => {
+
+                const clients = io.sockets.adapter.rooms[socket.channel].sockets;
+                const numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0;
+
+                io.sockets.in(socket.channel).emit('user joined channel', numClients);
+              });
             } else {
               socket.emit('messages-error', innerData);
             }

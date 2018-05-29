@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ChannelHeader from './channelHeader';
 import MessageIndex from './messageIndex';
 
 export default class MessageContainer extends Component {
@@ -70,6 +71,7 @@ export default class MessageContainer extends Component {
 
     return (
       <div className="message-container">
+        <ChannelHeader socket={socket}/>
         <MessageIndex socket={socket}/>
         <input className="message-input"
           type="text"
