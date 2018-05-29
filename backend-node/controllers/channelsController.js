@@ -5,9 +5,10 @@ const fetchChannelQuery = "SELECT * FROM channels WHERE title = ?;";
 const fetchUserChannelsQuery = "SELECT channels.ID, channels.title " +
                                "FROM channels JOIN memberships ON channels.ID = memberships.channel_id " +
                                "JOIN users ON memberships.user_id = users.ID " +
-                               "WHERE users.username = ?";
+                               "WHERE users.username = ? " +
+                               "ORDER BY channels.title ASC;";
 const createChannelQuery = "INSERT INTO channels(title) VALUES(?);";
-const searchChannelQuery = "SELECT * FROM channels WHERE title LIKE ?";
+const searchChannelQuery = "SELECT * FROM channels WHERE title LIKE ?;";
 
 // fetch information about a specific channel
 exports.fetchChannel = (title, callback) => {

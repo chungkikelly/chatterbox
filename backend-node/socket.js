@@ -147,6 +147,7 @@ const generateSocketEventHandlers = (io) => {
       channelsController.createChannel(title, (success, data) => {
         if(success) {
           socket.join(title);
+          membershipsController.joinChannel(socket.userID, data);
           socket.emit('receive channel', data, title);
         } else {
           socket.emit('channels-error', data);
@@ -157,3 +158,5 @@ const generateSocketEventHandlers = (io) => {
 };
 
 module.exports = generateSocketEventHandlers;
+
+// TODO handle channel errors
