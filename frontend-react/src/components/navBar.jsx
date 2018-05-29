@@ -30,7 +30,6 @@ export default class NavBar extends Component {
 
   render() {
     const { users, channels } = this.state;
-    console.log(channels);
 
     return (
       <ul className="nav-bar">
@@ -38,14 +37,14 @@ export default class NavBar extends Component {
           Chatterbox
         </div>
         <div className="new-notifs" onClick={this.handleClick}>
-          View New Messages
+          New Messages
         </div>
-        <div className="nav-bar-online">
-          Online
+        <div className="channels-label">
+          Channels
         </div>
-        { users.map((user) =>
-          <li className="online-li" key={`li-${user}`}>
-            { user }
+        { channels.map((channel) =>
+          <li className="channel-li" key={`li-${channel}`}>
+            { `# ${channel.title}` }
           </li>
         )}
       </ul>

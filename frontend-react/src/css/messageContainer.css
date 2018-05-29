@@ -8,20 +8,21 @@
 .typingIndicator {
   height: 20px;
   font-size: 14px;
-  padding-left: 20px;
+  padding-left: 35px;
 }
 
 .message-input {
   color: #2c2d30;
   font-size: large;
-  border: 2px solid #717274;
+  border: 2px solid rgba(145,145,147,.7);
   border-radius: .375rem;
   min-height: 41px;
-  margin: 10px 10px 10px 5px;
+  margin: 10px 15px 5px 25px;
   padding-left: 10px;
   padding-right: 10px;
 }
 
 .message-input:focus {
+  border-color: #717274;
   outline: none;
 }
