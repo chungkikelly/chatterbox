@@ -49,6 +49,13 @@
   color: white;
 }
 
+.channels-label-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .channels-label {
   display: flex;
   box-sizing: border-box;
@@ -62,6 +69,20 @@
 }
 
 .channels-label:hover {
+  color: white;
+}
+
+.add-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(202,196,201);
+  width: 10%;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.add-button:hover {
   color: white;
 }
 

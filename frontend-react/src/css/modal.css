@@ -1,0 +1,101 @@
+.new-channel-modal {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  z-index: 1;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.show {
+  display: flex;
+}
+
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 50%;
+  height: 50%;
+}
+
+.channel-modal-header {
+  font-size: 34px;
+  line-height: 41px;
+  font-weight: 900;
+}
+
+.channel-modal-message {
+  font-size: .9rem;
+  line-height: 1.25rem;
+  color: #717274;
+  margin-top: 1rem;
+  margin-bottom: 50px;
+}
+
+.channel-modal-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  height: 20px;
+  margin: 0 0 .25rem;
+}
+
+.channel-modal-input {
+  color: #2c2d30;
+  font-size: large;
+  border: 2px solid rgba(145, 145, 147, .7);
+  border-radius: .375rem;
+  min-height: 41px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.channel-modal-input:focus {
+  border-color: #717274;
+  outline: none;
+}
+
+.channel-button-container {
+  display: flex;
+  justify-content: flex-end;
+  height: 20%;
+  width: 100%;
+}
+
+.cancel-button {
+  display: flex;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 15px;
+  background-color: rgb(254, 254, 254);
+  line-height: 1.2rem;
+  border-radius: .375rem;
+  margin: 10px 5px 10px 10px;
+}
+
+.cancel-button:hover {
+  color: #0576b9;
+}
+
+.create-channel-button {
+  display: flex;
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  padding: 15px;
+  background-color: #008952;
+  line-height: 1.2rem;
+  border-radius: .375rem;
+  margin: 10px 10px 10px 5px;
+}

@@ -81,7 +81,7 @@ exports.createChannel = (title, callback) => {
     connection.query(createChannelQuery, title, (err, results, fields) => {
       connection.release();
       if (err) {
-        callback(false, "Unprocessable Entity.");
+        callback(false, "Name already taken!");
         return;
       }
 

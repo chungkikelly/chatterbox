@@ -142,6 +142,17 @@ const generateSocketEventHandlers = (io) => {
         }
       });
     });
+
+    socket.on('new channel', (title) => {
+      channelsController.createChannel(title, (success, data) => {
+        if(success) {
+          socket.join(title);
+          socket.emit('receive channel', data, title);
+        } else {
+          socket.emit('channels-error', data);
+        }
+      });
+    });
   });
 };
 

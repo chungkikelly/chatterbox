@@ -7,5 +7,6 @@ import './css/loginForm.css';
 import './css/navBar.css';
 import './css/messageContainer.css';
 import './css/messageIndex.css';
+import './css/modal.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
