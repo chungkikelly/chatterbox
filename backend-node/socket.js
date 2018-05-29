@@ -10,22 +10,21 @@ const generateSocketEventHandlers = (io) => {
 
   io.on('connection', (socket) => {
     activeSockets.push(socket);
-    socket.join('general');
 
     // refactored login code
     const loginUser = (username, id) => {
       users.push(username);
 
       // Bind user ID, username, and initial channel to socket for easy access
-      socket.id = id;
+      socket.userID = id;
       socket.username = username;
       socket.channel = 'general';
       // The general channel will always be the first row of the database
       socket.channelID = 1;
-      socket.join(socket.channel);
-
-      socket.emit('login', username);
-      socket.broadcast.emit('update online list', users);
+      socket.join('general', () => {
+        socket.emit('login', username);
+        socket.broadcast.emit('update online list', users);
+      });
     };
 
     socket.on('new user', function(username){
@@ -84,6 +83,13 @@ const generateSocketEventHandlers = (io) => {
       socket.emit('update online list', users);
     });
 
+    // socket.on('join channel', (title, channelID) => {
+    //   socket.join(title);
+    //   console.log(socket);
+    //   socket.channel = title;
+    //   socket.channelID = channelID;
+    // });
+
     // Handle user typing
     socket.on('user is typing', (username) => {
       io.sockets.in(socket.channel).emit('another user is typing', username);
@@ -96,10 +102,9 @@ const generateSocketEventHandlers = (io) => {
 
     // New message event handler
     socket.on('new message', (body) => {
-      messagesController.createMessage(body, socket.id, socket.channelID, (success, data) => {
+      messagesController.createMessage(body, socket.userID, socket.channelID, (success, data) => {
         if(success) {
           messagesController.fetchMessage(data, (innerSuccess, innerData) => {
-            console.log("backend success");
             io.sockets.in(socket.channel).emit('incoming message', innerData);
           });
         } else {
