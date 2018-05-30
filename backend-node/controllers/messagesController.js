@@ -6,7 +6,8 @@ const fetchMessageQuery = "SELECT messages.ID, messages.body, messages.created_a
                           " WHERE messages.id = ?;";
 const fetchMessagesQuery = "SELECT messages.ID, messages.body, messages.created_at, users.username" +
                            " FROM messages JOIN users ON users.ID = messages.author_id " +
-                           " WHERE messages.channel_id = ?;";
+                           " WHERE messages.channel_id = ?" +
+                           " ORDER BY messages.created_at ASC;";
 const fetchNewMessagesQuery = "SELECT messages.ID, messages.body, messages.created_at, users.username" +
                               " FROM messages JOIN users on users.ID = messages.author_id" +
                               " WHERE messages.created_at >" +
@@ -16,7 +17,8 @@ const fetchNewMessagesQuery = "SELECT messages.ID, messages.body, messages.creat
                               "(SELECT channels.ID FROM channels " +
                               "JOIN memberships ON channels.ID = memberships.channel_id " +
                               "JOIN users ON users.ID = memberships.user_id " +
-                              "WHERE users.ID = ?);";
+                              "WHERE users.ID = ?)" +
+                              " ORDER BY messages.created_at ASC;";
 const createMessageQuery = "INSERT INTO messages(body, author_id, channel_id) VALUES(?, ?, ?);";
 
 exports.fetchMessage = (id, callback) => {

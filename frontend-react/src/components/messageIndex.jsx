@@ -20,7 +20,7 @@ export default class MessageIndex extends Component {
       socket.emit('update last online', socket.username);
     });
     socket.on('incoming message', (message) => {
-      this.setState({ messages: [...this.state.messages, message] });
+      this.setState({ messages: [...this.state.messages, message], error: null });
     });
     socket.on('messages-error', (error) => {
       this.setState({ error });
