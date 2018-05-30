@@ -10,6 +10,7 @@ export default class SearchChannelModal extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   componentDidMount() {
@@ -22,18 +23,47 @@ export default class SearchChannelModal extends Component {
 
   handleChange(e) {
     const { socket } = this.props;
+    const { channelName } = this.state;
 
     this.setState({ channelName: e.target.value }, () => {
-      socket.emit('search channel', this.state.channelName);
+      socket.emit('search channel', channelName);
     });
   }
 
   handleClick() {
+    const { handleModal, socket } = this.props;
+    // Assume target channel is at the top of the channels list
+    const targetChannel = this.state.channels[0];
 
+    socket.emit('join channel', targetChannel.ID, targetChannel.title);
+    socket.emit('switch channel', targetChannel.ID);
+    handleModal();
+    this.setState({ channelName: '', channels: [] });
+  }
+
+  handleKeyPress(e) {
+    const { handleModal, socket } = this.props;
+    const targetChannel = this.state.channels[0];
+
+    if (e.key === "Enter" && this.state.channelName.length !== 0) {
+      socket.emit('join channel', targetChannel.ID, targetChannel.title);
+      socket.emit('switch channel', targetChannel.ID);
+      handleModal();
+      this.setState({ channelName: '', modal: false });
+    }
   }
 
   modalActive() {
     return 'new-channel-modal ' + (this.props.modal ? 'show' : 'hidden');
+  }
+
+  switchChannel(channel) {
+    const { handleModal, socket } = this.props;
+
+    socket.emit('join channel', channel.ID, channel.title);
+    socket.emit('switch channel', channel.ID);
+    handleModal();
+    this.setState({ channelName: '', channels: [] });
   }
 
   render() {
@@ -47,7 +77,8 @@ export default class SearchChannelModal extends Component {
           <input className="channel-modal-input"
                  placeholder="Search channels"
                  value={channelName}
-                 onChange={this.handleChange}/>
+                 onChange={this.handleChange}
+                 onKeyPress={this.handleKeyPress}/>
            <div className="channel-button-container">
 
              <button className="cancel-button"
@@ -59,7 +90,8 @@ export default class SearchChannelModal extends Component {
            <ul className="channel-li-container">
              { channels.map((channel) => {
                return (<li className="channel-li-modal"
-                 key={`li-${channel.title}`}>
+                 key={`li-${channel.title}`}
+                 onClick={() => this.switchChannel(channel)}>
                  { `# ${channel.title}` }
                </li>);
              })}

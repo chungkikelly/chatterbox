@@ -140,6 +140,11 @@ const generateSocketEventHandlers = (io) => {
       });
     });
 
+    socket.on('join channel', (channelID, title) => {
+      membershipsController.joinChannel(socket.userID, channelID);
+      socket.emit('receive channel', channelID, title);
+    });
+
     socket.on('switch channel', (channelID) => {
       channelsController.fetchChannel(channelID, (success, data) => {
         if(success) {
