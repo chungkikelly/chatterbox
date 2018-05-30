@@ -13,5 +13,3 @@ router.get('/messages', messagesController.fetchMessages);
 // router.delete('/messages/:id');
 
 module.exports = router;
-
-// TODO: Add edit and delete when time permits

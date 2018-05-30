@@ -13,5 +13,3 @@ router.get('/users/:id', usersController.fetchUser);
 router.post('/users', usersController.createUser);
 
 module.exports = router;
-
-// TODO: Add edit and delete when time permits

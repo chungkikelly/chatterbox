@@ -71,8 +71,6 @@ const generateSocketEventHandlers = (io) => {
       });
     });
 
-    // TODO consider error handling for 'disconnect' event
-
     // Handle user typing
     socket.on('user is typing', (username) => {
       io.sockets.in(socket.channel).emit('another user is typing', username);
@@ -190,5 +188,3 @@ const generateSocketEventHandlers = (io) => {
 };
 
 module.exports = generateSocketEventHandlers;
-
-// TODO handle channel errors

@@ -85,5 +85,3 @@ export default class NavBar extends Component {
     );
   }
 }
-
-// TODO Make sure to decide whether or not to include current user

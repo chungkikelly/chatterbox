@@ -28,8 +28,6 @@ export default class MessageIndex extends Component {
     socket.emit('request messages');
   }
 
-// TODO need to change setState for messages (infinite scrolling)
-
   render() {
     const { messages, error } = this.state;
     return (
