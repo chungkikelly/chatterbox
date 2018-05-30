@@ -75,7 +75,6 @@ exports.fetchNewMessages = (userID, callback) => {
 
     connection.query(fetchNewMessagesQuery, [userID, userID], (err, results, fields) => {
       connection.release();
-      console.log(err);
       if (err || results.length === 0) {
         callback(false, "Could not find any new messages.");
         return;

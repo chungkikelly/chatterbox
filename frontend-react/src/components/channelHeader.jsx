@@ -17,7 +17,6 @@ export default class ChannelHeader extends Component {
     });
 
     socket.on('user joined channel', (online) => {
-      console.log('hit');
       this.setState({ online });
     });
 
