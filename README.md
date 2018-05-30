@@ -32,3 +32,13 @@ To get the project up and running:
 2. Install Docker https://docs.docker.com/engine/installation/
 3. Once done, run `docker-compose up fullstack` in your terminal
 2. Test that it's running http://localhost:13000/
+
+### TODO
+
+1. Handle notifications and new messages more cleanly
+2. Private messaging
+3. Infinite scrolling with lazily-loaded messages
+4. Sending different file types encoded in base64
+5. Add authentication
+6. User profiles, statuses, and avatars
+7. Fully test backend and frontend
