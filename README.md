@@ -1,29 +1,34 @@
 # Chatterbox
 
-This starter kit currently supports `React` for the frontend and `Go`, `Python`, `Java`, or `Node` for the backend.
+**Chatterbox** is a single page fullstack web application built with
+JavaScript:
+
+1. [Node.js](https://nodejs.org/en/)/[Express](https://expressjs.com/)
+on the backend
+2. [React](https://reactjs.org/) on the frontend.
+3. Websockets were implemented using [socket.io](https://socket.io/)
+4. Data persisted with a [MySQL](https://www.mysql.com/) database
+5. Containerization with [Docker](https://www.docker.com/)
+
+### Features
+
+##### Login with any unique username
+![login](./login.png)
+
+##### Chat with any online users in any of the public channels
+![chat](./chat.png)
+
+##### Create new channels for other users to join
+![add](./add.png)
+
+##### Search the database for an existing channel by its title
+![search](./search.png)
+
+### Setup Instructions
 
 To get the project up and running:
-1. Install Docker https://docs.docker.com/engine/installation/
-2. In a terminal, go to the directory `challenge-eng-base-master`
-3. Edit `docker-compose.yml`. Change `services: backend: build:` based on your preferred language. Options are `backend-golang`, `backend-python`, `backend-java`, or `backend-node`.
-4. For a backend project
-    1. `docker-compose up backend`
-    2. Test that it's running http://localhost:18000/test
-5. For a fullstack project
-    1. `docker-compose up fullstack`
-    2. Test that it's running http://localhost:13000/test
 
-To restart the project
-
-    docker-compose down
-    docker-compose up <backend or fullstack>
-
-To see schema changes, remove the old db volume by adding `-v` when stopping
-
-    docker-compose down -v
-
-To see code changes, rebuild by adding `--build` when starting
-
-    docker-compose up --build <backend or fullstack>
-
-If you run into issues connecting to the db on startup, try restarting (without the `-v` flag).
+1. Pull the repository down or download the zip file
+2. Install Docker https://docs.docker.com/engine/installation/
+3. Once done, run `docker-compose up fullstack` in your terminal
+2. Test that it's running http://localhost:13000/
