@@ -9,5 +9,6 @@ import './css/messageContainer.css';
 import './css/messageIndex.css';
 import './css/modal.css';
 import './css/channelHeader.css';
+import './css/searchChannelModal.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));

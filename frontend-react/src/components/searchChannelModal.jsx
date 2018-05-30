@@ -42,8 +42,8 @@ export default class SearchChannelModal extends Component {
 
     return (
       <div className={this.modalActive()}>
-        <div className="modal-container">
-          <div className="channel-modal-header">Browse channels</div>
+        <div className="search-modal-container">
+          <div className="search-modal-header">Browse channels</div>
           <input className="channel-modal-input"
                  placeholder="Search channels"
                  value={channelName}
@@ -56,12 +56,14 @@ export default class SearchChannelModal extends Component {
              <button className="create-channel-button"
                      onClick={this.handleClick}>Join Channel</button>
            </div>
-          { channels.map((channel) => {
-            return (<li className="channel-li-modal"
-                key={`li-${channel.title}`}>
-              { `# ${channel.title}` }
-            </li>);
-          })}
+           <ul className="channel-li-container">
+             { channels.map((channel) => {
+               return (<li className="channel-li-modal"
+                 key={`li-${channel.title}`}>
+                 { `# ${channel.title}` }
+               </li>);
+             })}
+           </ul>
         </div>
       </div>
     );

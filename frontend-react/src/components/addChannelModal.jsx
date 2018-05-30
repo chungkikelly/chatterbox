@@ -20,8 +20,10 @@ export default class AddChannelModal extends Component {
     const { socket } = this.props;
     const { channelName } = this.state;
 
-    socket.emit('new channel', channelName);
-    this.setState({ channelName: '' });
+    if (channelName.length !== 0) {
+      socket.emit('new channel', channelName);
+      this.setState({ channelName: '' });
+    }
   }
 
   handleKeyPress(e) {
