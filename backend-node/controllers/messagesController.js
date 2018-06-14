@@ -1,14 +1,14 @@
 const db = require('./controller');
 
 // SQL Query Constants
-const fetchMessageQuery = "SELECT messages.ID, messages.body, messages.created_at, users.username" +
+const fetchMessageQuery = "SELECT messages.ID, messages.body, messages.type, messages.created_at, users.username" +
                           " FROM messages JOIN users ON users.ID = messages.author_id" +
                           " WHERE messages.id = ?;";
-const fetchMessagesQuery = "SELECT messages.ID, messages.body, messages.created_at, users.username" +
+const fetchMessagesQuery = "SELECT messages.ID, messages.body, messages.type, messages.created_at, users.username" +
                            " FROM messages JOIN users ON users.ID = messages.author_id " +
                            " WHERE messages.channel_id = ?" +
                            " ORDER BY messages.created_at ASC;";
-const fetchNewMessagesQuery = "SELECT messages.ID, messages.body, messages.created_at, users.username" +
+const fetchNewMessagesQuery = "SELECT messages.ID, messages.body, messages.type, messages.created_at, users.username" +
                               " FROM messages JOIN users on users.ID = messages.author_id" +
                               " WHERE messages.created_at >" +
                               " (SELECT users.last_online" +
@@ -19,7 +19,7 @@ const fetchNewMessagesQuery = "SELECT messages.ID, messages.body, messages.creat
                               "JOIN users ON users.ID = memberships.user_id " +
                               "WHERE users.ID = ?)" +
                               " ORDER BY messages.created_at ASC;";
-const createMessageQuery = "INSERT INTO messages(body, author_id, channel_id) VALUES(?, ?, ?);";
+const createMessageQuery = "INSERT INTO messages(body, author_id, channel_id, type) VALUES(?, ?, ?, ?);";
 
 exports.fetchMessage = (id, callback) => {
   db.getConnection((serverError, connection) => {
@@ -86,15 +86,18 @@ exports.fetchNewMessages = (userID, callback) => {
 };
 
 // create message
-exports.createMessage = (body, authorID, channelID, callback) => {
+exports.createMessage = (body, authorID, channelID, type, callback) => {
   db.getConnection((serverError, connection) => {
     if (serverError) {
       callback(false, "Internal Server Error.");
       return;
     }
 
-    connection.query(createMessageQuery, [body, authorID, channelID], (err, results, fields) => {
+    connection.query(createMessageQuery, [body, authorID, channelID, type], (err, results, fields) => {
       connection.release();
+
+      console.log(err);
+
       if (err) {
         callback(false, "Could not send message.");
         return;

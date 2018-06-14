@@ -12,6 +12,7 @@ export default class MessageContainer extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleLoad = this.handleLoad.bind(this);
   }
 
   componentDidMount() {
@@ -54,9 +55,22 @@ export default class MessageContainer extends Component {
 
     // Condition to manage message submission
     if (e.key === "Enter" && this.state.body.length !== 0) {
-      socket.emit('new message', this.state.body);
+      socket.emit('new message', this.state.body, 'text');
       this.setState({ body: '', typing: false });
       socket.emit('user is not typing', socket.username);
+    }
+  }
+
+  handleLoad(e) {
+    const { socket } = this.props;
+    const fr = new FileReader();
+
+    fr.addEventListener('load', () => {
+      socket.emit('new message', fr.result, 'image');
+    });
+
+    if (e.target.files[0]) {
+      fr.readAsDataURL(e.target.files[0]);
     }
   }
 
@@ -73,13 +87,23 @@ export default class MessageContainer extends Component {
       <div className="message-container">
         <ChannelHeader socket={socket}/>
         <MessageIndex socket={socket}/>
-        <input className="message-input"
-          type="text"
-          placeholder="Message the group"
-          value={body}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeyPress}
-        />
+        <div className='message-box'>
+          <input id='file' className="image-input"
+            type="file"
+            onChange={this.handleLoad}
+            onClick={(e) => {
+              e.target.value = null;
+            }}
+          />
+          <label className="image-label" htmlFor="file">+</label>
+          <input className="message-input"
+            type="text"
+            placeholder="Message the group"
+            value={body}
+            onChange={this.handleChange}
+            onKeyDown={this.handleKeyPress}
+          />
+        </div>
         <div className="typingIndicator">
           { typingUsers.length === 0 ? '' : typingIndicator }
         </div>

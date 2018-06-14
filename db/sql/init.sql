@@ -33,9 +33,10 @@ CREATE INDEX memberships_channel ON memberships (channel_id);
 
 CREATE TABLE messages(
   ID integer NOT NULL AUTO_INCREMENT,
-  body varchar(255) NOT NULL,
+  body text NOT NULL,
   author_id integer NOT NULL,
   channel_id integer NOT NULL,
+  type varchar(255) NOT NULL,
   created_at timestamp DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (ID),

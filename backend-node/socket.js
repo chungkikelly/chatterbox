@@ -82,8 +82,8 @@ const generateSocketEventHandlers = (io) => {
     });
 
     // New message event handler
-    socket.on('new message', (body) => {
-      messagesController.createMessage(body, socket.userID, socket.channelID, (success, data) => {
+    socket.on('new message', (body, type) => {
+      messagesController.createMessage(body, socket.userID, socket.channelID, type, (success, data) => {
         if(success) {
           messagesController.fetchMessage(data, (innerSuccess, innerData) => {
             io.sockets.in(socket.channel).emit('incoming message', innerData);

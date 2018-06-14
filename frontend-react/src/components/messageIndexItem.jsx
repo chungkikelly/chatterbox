@@ -16,16 +16,30 @@ export default class MessageIndexItem extends Component {
     const time = this.splitTimestamp(message.created_at).split("");
     time.splice(4, 3);
 
-    return (
-      <li className="message-index-item">
-        <div className="message-title">
-          <div className="username"> { message.username } </div>
-          <div className="datetime"> { time } </div>
-        </div>
-        <div className="message-body">
-          { message.body }
-        </div>
-      </li>
-    );
+    if (message.type === 'image') {
+      return (
+        <li className="message-index-item">
+          <div className="message-title">
+            <div className="username"> { message.username } </div>
+            <div className="datetime"> { time } </div>
+          </div>
+          <div className="message-body">
+            <img src={message.body} alt='missing'/>
+          </div>
+        </li>
+      );
+    } else {
+      return (
+        <li className="message-index-item">
+          <div className="message-title">
+            <div className="username"> { message.username } </div>
+            <div className="datetime"> { time } </div>
+          </div>
+          <div className="message-body">
+            { message.body }
+          </div>
+        </li>
+      );
+    }
   }
 }
